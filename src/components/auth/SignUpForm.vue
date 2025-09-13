@@ -28,26 +28,27 @@ const validateForm = () => {
 
 const handleSubmit = () => {
     if (validateForm()) {
-        console.log('✅ Datos enviados:', form)
+        console.log('Formulario:', form)
     } else {
-        console.log('❌ Errores:', errors)
+        console.log('Errores:', errors)
     }
 }
 </script>
 
 <template>
-    <div class="2xl:container 2xl:mx-auto flex justify-around items-center h-screen bg-blue-ebd px-8">
-        <div>
-            <img src="../../../public/ebd-logo.png" alt="Logo EBD" class="w-[20rem] drop-shadow-md">
+    <div
+        class="min-h-screen bg-blue-ebd flex flex-col lg:flex-row items-center justify-center px-6 lg:px-12 gap-y-12 lg:gap-x-20 py-5">
+        <div class="flex-shrink-0">
+            <img src="/ebd-logo.png" alt="Logo EBD" class="w-40 sm:w-56 lg:w-80 drop-shadow-md mx-auto" />
         </div>
 
-        <div class="w-[700px] bg-white/10 backdrop-blur-md p-10 rounded-xl shadow-lg">
-            <h2 class="text-4xl mb-5 font-bold text-white">Registro</h2>
-            <p class="mb-10 font-medium text-white/90">
+        <div class="w-full max-w-lg bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl sm:text-4xl mb-5 font-bold text-white text-center lg:text-left">Registro</h2>
+            <p class="mb-10 font-medium text-white/90 text-center lg:text-left">
                 Completa el formulario para crear tu cuenta en nuestra plataforma.
             </p>
 
-            <form @submit.prevent="handleSubmit" class="w-full grid grid-cols-2 grid-rows-4 gap-6">
+            <form @submit.prevent="handleSubmit" class="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="font-medium text-white">Nombres</label>
                     <TextField placeholder="Jhon" v-model="form.name" />
@@ -89,18 +90,18 @@ const handleSubmit = () => {
                     <p v-if="errors.password" class="text-red-400 text-sm mt-1">{{ errors.password }}</p>
                 </div>
 
-                <div class="col-span-2 row-start-4">
+                <div class="md:col-span-2">
                     <div class="flex items-center mb-4">
                         <input type="checkbox" v-model="form.terms"
-                            class="w-5 h-5 text-orange-ebd bg-gray-100 border-gray-300 rounded-sm focus:ring-orange-ebd">
-                        <label class="ms-2 text-[15px] font-medium text-white">
+                            class="w-5 h-5 text-orange-ebd bg-gray-100 border-gray-300 rounded-sm focus:ring-orange-ebd" />
+                        <label class="ml-2 text-[15px] font-medium text-white">
                             Acepto todos los términos, <a href="#" class="underline">políticas de privacidad</a> y más
                         </label>
                     </div>
                     <p v-if="errors.terms" class="text-red-400 text-sm mt-1">{{ errors.terms }}</p>
 
                     <button
-                        class="bg-orange-ebd hover:bg-orange-500 transition-colors text-white py-2 px-4 rounded-md w-[200px] h-12 font-bold cursor-pointer"
+                        class="bg-orange-ebd hover:bg-orange-500 transition-colors text-white py-2 px-4 rounded-md w-full sm:w-[200px] h-12 font-bold cursor-pointer"
                         type="submit">
                         Crear Cuenta
                     </button>
