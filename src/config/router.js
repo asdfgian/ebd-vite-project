@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import SignUpForm from "../components/auth/SignUpForm.vue";
 import SignInForm from "../components/auth/SignInForm.vue";
+import AuthenticatedLayout from "../components/layout/AuthenticatedLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: "/sign-in",
       name: "signIn",
       component: SignInForm,
+    },
+    {
+      path: "/",
+      name: "authenticated",
+      component: AuthenticatedLayout,
     },
   ],
 });
