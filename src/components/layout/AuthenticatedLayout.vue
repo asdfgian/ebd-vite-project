@@ -11,7 +11,7 @@ import Sidebar from '../shared/Sidebar.vue';
         <div class="xl:ml-72 flex flex-col w-full">
             <Header></Header>
             <div class="h-full bg-gray-100">
-                test
+                <RouterView/>
             </div>
         </div>
         <AsideProfile></AsideProfile>
