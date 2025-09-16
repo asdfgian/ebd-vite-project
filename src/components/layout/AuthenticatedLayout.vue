@@ -7,13 +7,13 @@ import Sidebar from '../shared/Sidebar.vue';
 
 <template>
     <Sidebar></Sidebar>
-    <div class="flex">
-        <div class="xl:ml-72 flex flex-col w-full">
+    <div class="flex h-full">
+        <div class="xl:ml-72 flex flex-col w-full h-screen">
             <Header></Header>
-            <div class="h-full bg-gray-100">
-                <RouterView/>
+            <div class="flex-1 bg-gray-100">
+                <router-view></router-view>
             </div>
         </div>
-        <AsideProfile></AsideProfile>
+        <AsideProfile></AsideProfile> 
     </div>
 </template>

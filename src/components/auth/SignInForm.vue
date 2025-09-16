@@ -1,6 +1,8 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import TextField from '../shared/TextField.vue'
+import { signIn } from '../../services/AuthService';
+import router from '../../config/router';
 
 const form = reactive({
     identifier: '',
@@ -11,6 +13,8 @@ const errors = reactive({
     identifier: '',
     password: ''
 })
+
+const serverError = ref("");
 
 const validateForm = () => {
     let isValid = true
@@ -43,13 +47,24 @@ const validateForm = () => {
     return isValid
 }
 
-const handleSubmit = () => {
-    if (validateForm()) {
-        console.log('Formulario:', form)
-    } else {
-        console.log('Errores:', errors)
+const handleSubmit = async () => {
+    serverError.value = "";
+
+    if (!validateForm()) return;
+
+    try {
+        const response = await signIn(form);
+        const data = response.data;
+
+        if (data?.token) {
+            localStorage.setItem("token", data.token);
+            router.push("/")
+        }
+    } catch (error) {
+        serverError.value = error.response?.data || "Error inesperado. Intenta nuevamente.";
     }
-}
+};
+
 </script>
 
 <template>
@@ -70,6 +85,7 @@ const handleSubmit = () => {
                     <label class="block mb-2 font-medium text-white">Contraseña*</label>
                     <TextField v-model="form.password" type="password" placeholder="••••••••" />
                     <p v-if="errors.password" class="text-red-400 text-sm mt-1">{{ errors.password }}</p>
+                    <p v-if="serverError" class="text-red-400 text-sm mt-1 font-bold">{{ serverError }}</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

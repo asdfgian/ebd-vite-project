@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import TextField from '../shared/TextField.vue';
+import { signUp } from '../../services/AuthService';
 
 const form = reactive({
     name: '',
@@ -26,13 +27,33 @@ const validateForm = () => {
     return !Object.values(errors).some(e => e)
 }
 
-const handleSubmit = () => {
-    if (validateForm()) {
-        console.log('Formulario:', form)
-    } else {
-        console.log('Errores:', errors)
+const handleSubmit = async () => {
+    if (!validateForm()) {
+        console.log("Errores:", errors);
+        return;
     }
-}
+
+    try {
+        const { name, lastname, terms, ...rest } = form;
+        const payload = {
+            ...rest,
+            name: `${name} ${lastname}`,
+        };
+
+        console.log("Formulario listo para enviar:", payload);
+
+        const response = await signUp(payload);
+        console.log("Respuesta del servidor:", response.data);
+
+        if (response.data.token) {
+            localStorage.setItem("token", response.data.token);
+        }
+
+    } catch (error) {
+        console.error("Error en el registro:", error.response?.data || error.message);
+    }
+};
+
 </script>
 
 <template>

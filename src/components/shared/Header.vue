@@ -1,10 +1,8 @@
 <script setup></script>
 <template>
-    <nav
-        class="w-full h-20 flex items-center justify-between px-4 sm:px-8 md:px-16 bg-white">
+    <nav class="w-full h-20 flex items-center justify-between px-4 sm:px-8 md:px-16 bg-white">
         <h6 class="text-2xl font-bold text-blue-ebd">EBD Perú</h6>
 
-        <!-- desktop -->
         <div class="hidden md:flex items-center">
             <form class="flex items-center max-w-sm mx-auto w-full">
                 <input type="text"
@@ -21,7 +19,6 @@
             </form>
         </div>
 
-        <!-- buscador en mobile -->
         <div class="flex md:hidden">
             <button class="p-2 text-blue-ebd hover:text-orange-ebd transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
