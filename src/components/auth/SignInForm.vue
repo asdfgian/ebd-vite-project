@@ -76,13 +76,13 @@ const handleSubmit = async () => {
 
             <form @submit.prevent="handleSubmit" class="space-y-5">
                 <div>
-                    <label class="block mb-2 font-medium text-white">Correo o nombre de usuario*</label>
+                    <label for="identifier" class="block mb-2 font-medium text-white">Correo o nombre de usuario*</label>
                     <TextField v-model="form.identifier" type="text" placeholder="usuario123 o jhon@example.com" />
                     <p v-if="errors.identifier" class="text-red-400 text-sm mt-1">{{ errors.identifier }}</p>
                 </div>
 
                 <div>
-                    <label class="block mb-2 font-medium text-white">Contraseña*</label>
+                    <label for="password" class="block mb-2 font-medium text-white">Contraseña*</label>
                     <TextField v-model="form.password" type="password" placeholder="••••••••" />
                     <p v-if="errors.password" class="text-red-400 text-sm mt-1">{{ errors.password }}</p>
                     <p v-if="serverError" class="text-red-400 text-sm mt-1 font-bold">{{ serverError }}</p>

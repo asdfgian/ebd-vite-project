@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue';
 import TextField from '../shared/TextField.vue';
 import { signUp } from '../../services/AuthService';
+import router from '../../config/router';
 
 const form = reactive({
     name: '',
@@ -40,17 +41,15 @@ const handleSubmit = async () => {
             name: `${name} ${lastname}`,
         };
 
-        console.log("Formulario listo para enviar:", payload);
-
         const response = await signUp(payload);
-        console.log("Respuesta del servidor:", response.data);
 
-        if (response.data.token) {
+        if (response.data?.token) {
             localStorage.setItem("token", response.data.token);
+            router.push("/")
         }
 
     } catch (error) {
-        console.error("Error en el registro:", error.response?.data || error.message);
+        console.error("Error en el registro:", error.response?.data);
     }
 };
 
