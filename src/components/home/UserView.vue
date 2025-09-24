@@ -43,7 +43,7 @@
                                 Ver detalle
                             </a>
                             <a class="font-medium text-orange-ebd hover:underline cursor-pointer"
-                                @click="openEdit(user)">
+                                @click="openEdit(user.id)">
                                 Editar
                             </a>
                         </td>
@@ -56,57 +56,101 @@
                 </span>
             </nav>
             <!-- Detalle -->
-            <div v-if="showDetail" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-                    <h2 class="text-xl font-bold mb-4">Detalle de Usuario</h2>
-                    <img :src="detail?.avatarUrl" alt="avatar"
-                        class="w-35 h-35 rounded-full mb-4 mx-auto" />
-                    <p><strong>Email:</strong> {{ detail?.email }}</p>
-                    <p><strong>Usuario:</strong> {{ detail?.username }}</p>
-                    <p><strong>Nombre:</strong> {{ detail?.name }}</p>
-                    <p><strong>Teléfono:</strong> {{ detail?.phone || '-' }}</p>
-                    <p><strong>Estado:</strong> {{ detail?.status }}</p>
-                    <p><strong>Rol:</strong> {{ detail?.roleName }}</p>
-                    <p><strong>Departamento:</strong> {{ detail?.departmentId }}</p>
-                    <p><strong>Creado:</strong> {{ formatDate(detail?.createdAt) }}</p>
-                    <p><strong>Actualizado:</strong> {{ formatDate(detail?.updatedAt) }}</p>
+            <div v-if="showDetail" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+                <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
+                    <h2 class="text-xl font-bold mb-4 text-white">Detalle de Usuario</h2>
+                    <img :src="detail?.avatarUrl" alt="avatar" class="w-35 h-35 rounded-full mb-4 mx-auto" />
+                    <p class="text-white"><strong>Email:</strong> {{ detail?.email }}</p>
+                    <p class="text-white"><strong>Usuario:</strong> {{ detail?.username }}</p>
+                    <p class="text-white"><strong>Nombre:</strong> {{ detail?.name }}</p>
+                    <p class="text-white"><strong>Teléfono:</strong> {{ detail?.phone || '-' }}</p>
+                    <p class="text-white"><strong>Estado:</strong> {{ detail?.status == 'A' ? "Activo" : "Inactivo" }}
+                    </p>
+                    <p class="text-white"><strong>Rol:</strong> {{ detail?.roleName }}</p>
+                    <p class="text-white"><strong>Función:</strong> {{ detail?.roleDto.description }}</p>
+                    <p class="text-white"><strong>Departamento:</strong> {{ detail?.departmentDto.name }}</p>
+                    <p class="text-white"><strong>Creado:</strong> {{ formatDate(detail?.createdAt) }}</p>
+                    <p class="text-white"><strong>Actualizado:</strong> {{ formatDate(detail?.updatedAt) }}</p>
 
                     <div class="mt-4 flex justify-end">
-                        <button @click="showDetail = false" class="px-4 py-2 bg-orange-ebd text-white rounded">
+                        <button @click="showDetail = false"
+                            class="px-4 py-2 bg-orange-ebd text-white rounded cursor-pointer">
                             Cerrar
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Editar -->
-            <div v-if="showEdit" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-                    <h2 class="text-xl font-bold mb-4">Editar Usuario</h2>
-                    <form @submit.prevent="updateUser">
-                        <div class="mb-3">
-                            <label class="block text-sm">Usuario</label>
-                            <input v-model="editForm.username" class="w-full border px-2 py-1 rounded" />
+            <div v-if="showEdit" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+                <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
+                    <h2 class="text-xl font-semibold text-white mb-3">
+                        Editar empleado
+                    </h2>
+                    <form @submit.prevent="updateUser()">
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-2">Usuario</label>
+                            <input v-model="editForm.username" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required="">
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-sm">Teléfono</label>
-                            <input v-model="editForm.phone" class="w-full border px-2 py-1 rounded" />
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-2">Teléfono</label>
+                            <input v-model="editForm.phone" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required="">
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-sm">Avatar URL</label>
-                            <input v-model="editForm.avatarUrl" class="w-full border px-2 py-1 rounded" />
+                        <div class="mb-2">
+                            <label class="block text-sm  text-white mb-2">Avatar URL</label>
+                            <input v-model="editForm.avatarUrl" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required="">
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-sm">Departamento</label>
-                            <input v-model="editForm.departmentId" type="number"
-                                class="w-full border px-2 py-1 rounded" />
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-2">Departamento</label>
+                            <select v-model="editForm.departmentId" class="border text-sm rounded-lg 
+                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                            bg-gray-600 border-gray-500 dark:placeholder-gray-400 
+                            text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option :value="1">Tecnología de la Información</option>
+                                <option :value="2">Redes y Comunicaciones</option>
+                                <option :value="3">Soporte Técnico</option>
+                                <option :value="4">Mantenimiento de Hardware</option>
+                                <option :value="5">Seguridad Informática</option>
+                                <option :value="6">Gestión de Inventarios</option>
+                                <option :value="7">Compras y Proveedores</option>
+                                <option :value="8">Logística y Almacén</option>
+                                <option :value="9">Desarrollo de Software</option>
+                                <option :value="10">Auditoría de Sistemas</option>
+                                <option :value="11">Sin Asignar</option>
+                            </select>
                         </div>
-
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-2">Rol</label>
+                            <select v-model="editForm.roleId" class="border text-sm rounded-lg 
+                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                            bg-gray-600 border-gray-500 dark:placeholder-gray-400 
+                            text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option :value="1">ADMINISTRADOR</option>
+                                <option :value="2">INVENTARISTA</option>
+                                <option :value="3">AUDITOR</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-2">Estado</label>
+                            <select v-model="editForm.status" class="border text-sm rounded-lg 
+                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                            bg-gray-600 border-gray-500 dark:placeholder-gray-400 
+                            text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="A">Activo</option>
+                                <option value="I">Inactivo</option>
+                            </select>
+                        </div>
                         <div class="mt-4 flex justify-end gap-3">
                             <button type="button" @click="showEdit = false"
-                                class="px-4 py-2 bg-gray-400 text-white rounded">
+                                class="px-4 py-2 bg-gray-400 text-white rounded cursor-pointer">
                                 Cancelar
                             </button>
-                            <button type="submit" class="px-4 py-2 bg-orange-ebd text-white rounded">
+                            <button type="submit" class="px-4 py-2 bg-orange-ebd text-white rounded cursor-pointer">
                                 Guardar
                             </button>
                         </div>
@@ -150,19 +194,31 @@ const openDetail = async (id) => {
     }
 };
 
-const openEdit = (user) => {
-    editForm.value = {
-        username: user.username,
-        phone: user.phone || "",
-        avatarUrl: user.avatarUrl || "",
-        departmentId: user.departmentId || null,
-    };
-    showEdit.value = true;
+const openEdit = async (id) => {
+    try {
+        const response = await getUserDetail(id);
+        const user = response.data;
+
+        editForm.value = {
+            id: user.id,
+            username: user.username,
+            phone: user.phone || "",
+            avatarUrl: user.avatarUrl || "",
+            departmentId: user.departmentDto.id || null,
+            roleId: user.roleDto.id,
+            status: user.status
+        };
+
+        showEdit.value = true;
+    } catch (err) {
+        console.error("Error al traer usuario para editar:", err);
+    }
 };
+
 
 const updateUser = async () => {
     try {
-        await updateUserApi(editForm.value);
+        await updateUserApi(editForm.value.id, editForm.value);
         showEdit.value = false;
         const response = await getAllUsers();
         users.value = response.data;
