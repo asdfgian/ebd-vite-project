@@ -4,8 +4,8 @@
         <div class="bg-transparent h-[30rem] flex flex-col">
             <div class="h-[5rem] bg-white flex justify-end items-center">
                 <div class="flex flex-row gap-5 mr-5">
-                    <div class="h-8 w-8">
-                        <svg class="h-8 w-8" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                    <div class="h-6 w-6">
+                        <svg class="h-6 w-6" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -21,8 +21,8 @@
                             </g>
                         </svg>
                     </div>
-                    <div class="h-8 w-8">
-                        <svg class="h-8 w-8" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                    <div class="h-6 w-6">
+                        <svg class="h-6 w-6" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                             <g id="SVGRepo_iconCarrier">
@@ -32,13 +32,13 @@
                             </g>
                         </svg>
                     </div>
-                    <div class="bg-gray-400 h-8 w-8 rounded-[100%]">
+                    <div class="bg-gray-400 h-6 w-6 rounded-[100%]">
                     </div>
                 </div>
             </div>
             <div class="bg-transparent h-full flex justify-center">
                 <div class="bg-transparent h-full w-[50%] flex flex-col items-center justify-center">
-                    <div class="bg-gray-400 w-36 h-36 rounded-[100%] flex justify-center items-center">
+                    <div class="bg-gray-400 w-30 h-30 rounded-[100%] flex justify-center items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-32">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -53,8 +53,8 @@
         <div id="notifications" class="h-[100%]">
             <div class="flex justify-between items-center px-5">
                 <p class="font-bold">Notificaciones</p>
-                <div class="bg-white w-10 h-10">
-                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="bg-white w-7 h-7">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                         <g id="SVGRepo_iconCarrier">

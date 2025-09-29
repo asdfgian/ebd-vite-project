@@ -72,7 +72,7 @@
                         <span class="ml-2">Proveedores</span>
                     </router-link>
                     <a
-                        class="text-sm flex font-medium text-white py-2 px-2 hover:bg-orange-ebd hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out">
+                        class="text-sm flex font-medium text-white py-2 px-2 hover:bg-orange-ebd hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
