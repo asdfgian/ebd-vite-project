@@ -50,7 +50,7 @@
                 </span>
             </nav>
             <!-- Detalle -->
-            <div v-if="showDetail" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+            <div v-if="showDetail" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center">
                 <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
                     <h2 class="text-xl font-bold mb-4 text-white">Detalle de Usuario</h2>
                     <img :src="detail?.avatarUrl" alt="avatar" class="w-35 h-35 rounded-full mb-4 mx-auto" />
@@ -89,7 +89,7 @@
                 </div>
             </div>
             <!-- Editar -->
-            <div v-if="showEdit" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+            <div v-if="showEdit" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center">
                 <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
                     <h2 class="text-xl font-semibold text-white mb-3">Editar empleado</h2>
                     <form @submit.prevent="updateUser()">

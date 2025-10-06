@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import TextField from '../shared/TextField.vue';
 import { signUp } from '../../services/AuthService';
 import router from '../../config/router';
@@ -70,31 +70,31 @@ const handleSubmit = async () => {
 
             <form @submit.prevent="handleSubmit" class="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="font-medium text-white">Nombres</label>
+                    <label for="" class="font-medium text-white">Nombres</label>
                     <TextField placeholder="Jhon" v-model="form.name" />
                     <p v-if="errors.name" class="text-red-400 text-sm mt-1">{{ errors.name }}</p>
                 </div>
 
                 <div>
-                    <label class="font-medium text-white">Apellidos</label>
+                    <label for="" class="font-medium text-white">Apellidos</label>
                     <TextField placeholder="Doe" v-model="form.lastname" />
                     <p v-if="errors.lastname" class="text-red-400 text-sm mt-1">{{ errors.lastname }}</p>
                 </div>
 
                 <div>
-                    <label class="font-medium text-white">Nombre de usuario</label>
+                    <label for="" class="font-medium text-white">Nombre de usuario</label>
                     <TextField placeholder="JhonDoe" v-model="form.username" />
                     <p v-if="errors.username" class="text-red-400 text-sm mt-1">{{ errors.username }}</p>
                 </div>
 
                 <div>
-                    <label class="font-medium text-white">Email</label>
+                    <label for="" class="font-medium text-white">Email</label>
                     <TextField placeholder="jhon@example.com" v-model="form.email" />
                     <p v-if="errors.email" class="text-red-400 text-sm mt-1">{{ errors.email }}</p>
                 </div>
 
                 <div>
-                    <label class="font-medium text-white">Género</label>
+                    <label for="" class="font-medium text-white">Género</label>
                     <select v-model="form.gender"
                         class="bg-white text-blue-ebd text-[17px] focus:outline-orange-ebd rounded-md block w-full h-10 p-2.5 mt-1.5">
                         <option value="" disabled selected>Selecciona tu género</option>
@@ -105,7 +105,7 @@ const handleSubmit = async () => {
                 </div>
 
                 <div>
-                    <label class="font-medium text-white">Contraseña</label>
+                    <label for="" class="font-medium text-white">Contraseña</label>
                     <TextField type="password" v-model="form.password" />
                     <p v-if="errors.password" class="text-red-400 text-sm mt-1">{{ errors.password }}</p>
                 </div>
@@ -114,7 +114,7 @@ const handleSubmit = async () => {
                     <div class="flex items-center mb-4">
                         <input type="checkbox" v-model="form.terms"
                             class="w-5 h-5 text-orange-ebd bg-gray-100 border-gray-300 rounded-sm focus:ring-orange-ebd" />
-                        <label class="ml-2 text-[15px] font-medium text-white">
+                        <label for="" class="ml-2 text-[15px] font-medium text-white">
                             Acepto todos los términos, <a href="#" class="underline">políticas de privacidad</a> y más
                         </label>
                     </div>

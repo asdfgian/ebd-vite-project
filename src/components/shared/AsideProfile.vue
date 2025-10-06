@@ -1,6 +1,6 @@
 <script setup></script>
 <template>
-    <div class="w-[35rem] h-screen bg-white flex flex-col">
+    <div class="w-[30rem] h-screen bg-white flex flex-col">
         <div class="bg-transparent h-[30rem] flex flex-col">
             <div class="h-[5rem] bg-white flex justify-end items-center">
                 <div class="flex flex-row gap-5 mr-5">

@@ -1,8 +1,8 @@
 <script setup></script>
 <template>
-    <aside class="-translate-x-72 fixed inset-0 z-50 w-72 transition-transform duration-300 xl:translate-x-0">
+    <aside class="-translate-x-60 fixed inset-0 z-10 w-60 transition-transform duration-300 xl:translate-x-0">
         <div id="sidebar"
-            class="bg-blue-ebd h-screen md:block shadow-xl px-3 md:w-72 lg:w-72 overflow-x-hidden transition-transform duration-300 ease-in-out">
+            class="bg-blue-ebd h-screen md:block shadow-xl px-3 md:w-60 lg:w-60 overflow-x-hidden transition-transform duration-300 ease-in-out">
             <div class="space-y-6 md:space-y-10 mt-10">
                 <div class="">
                     <img src="/ebd-logo.png" alt="" class="w-40 mx-auto">

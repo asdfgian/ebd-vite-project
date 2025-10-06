@@ -15,7 +15,6 @@
             <table class="w-full text-sm text-left rtl:text-right text-black">
                 <thead class="text-xs text-white uppercase bg-orange-ebd">
                     <tr>
-                        <th scope="col" class="px-6 py-3">RUC</th>
                         <th scope="col" class="px-6 py-3">Nombre</th>
                         <th scope="col" class="px-6 py-3">Email</th>
                         <th scope="col" class="px-6 py-3">Contacto</th>
@@ -24,19 +23,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-200">
+                    <tr v-for="provider in providers" :key="provider.ruc"
+                        class="bg-white border-b border-gray-200 hover:bg-gray-200">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            hola
+                            {{ provider.name }}
                         </th>
-                        <td class="px-6 py-4">hola</td>
-                        <td class="px-6 py-4">hola</td>
-                        <td class="px-6 py-4">hola</td>
-                        <td class="px-6 py-4">hola</td>
+                        <td class="px-6 py-4">{{ provider.email }}</td>
+                        <td class="px-6 py-4">{{ provider.phone }}</td>
+                        <td class="px-6 py-4" :class="provider.status == 'ACTIVO'
+                            ? 'text-green-600 font-bold'
+                            : 'text-red-600 font-bold'
+                            ">{{ provider.status }}</td>
                         <td class="px-6 py-4 flex gap-4">
                             <a class="font-medium text-orange-ebd hover:underline cursor-pointer"
-                                @click="openDetail(1)">Ver detalle</a>
+                                @click="openDetail(provider.id)">Ver detalle</a>
                             <a class="font-medium text-orange-ebd hover:underline cursor-pointer"
-                                @click="openEdit(2)">Editar</a>
+                                @click="openEdit(provider.id)">Editar</a>
                         </td>
                     </tr>
                 </tbody>
@@ -44,11 +46,11 @@
             <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between py-2 px-3">
                 <span class="text-sm font-normal text-gray-500 mb-4 md:mb-0 block w-full md:inline md:w-auto">
                     Mostrando
-                    <span class="font-semibold text-gray-900">5</span>
+                    <span class="font-semibold text-gray-900">{{ providers.length }}</span>
                 </span>
             </nav>
             <!--Crear-->
-            <div v-if="showCreate" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+            <div v-if="showCreate" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center">
                 <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
                     <form @submit.prevent="createProviderFn">
                         <!-- RUC con botón buscar -->
@@ -122,22 +124,22 @@
                 </div>
             </div>
             <!-- Detalle -->
-            <div v-if="showDetail" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+            <div v-if="showDetail" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center">
                 <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
                     <h2 class="text-xl font-bold mb-4 text-white">
                         Detalle del Proveedor
                     </h2>
-                    <p class="text-white"><strong>RUC:</strong> cds</p>
-                    <p class="text-white"><strong>Nombre:</strong> sdcsc</p>
+                    <p class="text-white"><strong>RUC:</strong> {{ detail.ruc }}</p>
+                    <p class="text-white"><strong>Nombre:</strong> {{ detail.name }}</p>
                     <p class="text-white">
                         <strong>Direccion:</strong>
-                        scsdcs
+                        {{ detail.address }}
                     </p>
-                    <p class="text-white"><strong>Distrito:</strong> vdfv</p>
-                    <p class="text-white"><strong>Departamento:</strong> fvdf</p>
-                    <p class="text-white"><strong>Estado:</strong> sdcsd</p>
-                    <p class="text-white"><strong>Email:</strong> scsdcs</p>
-                    <p class="text-white"><strong>Telefono:</strong> scsdcs</p>
+                    <p class="text-white"><strong>Distrito:</strong> {{ detail.district }}</p>
+                    <p class="text-white"><strong>Departamento:</strong> {{ detail.department }}</p>
+                    <p class="text-white"><strong>Estado:</strong> {{ detail.status }}</p>
+                    <p class="text-white"><strong>Email:</strong> {{ detail.email }}</p>
+                    <p class="text-white"><strong>Telefono:</strong> {{ detail.phone }}</p>
 
                     <div class="mt-4 flex justify-end">
                         <button @click="showDetail = false"
@@ -148,7 +150,7 @@
                 </div>
             </div>
             <!-- Editar -->
-            <div v-if="showEdit" class="fixed inset-0 bg-gray-800 opacity-99 flex justify-center items-center">
+            <div v-if="showEdit" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center">
                 <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
                     <form>
                         <div class="mb-2">
@@ -180,15 +182,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import {
     getProviderByRuc,
     createProvider,
+    getAllProviders,
+    getProviderDetailById
 } from "../../services/ProviderService";
 
 const providers = ref([]);
 const showDetail = ref(false);
+const loading = ref(true);
+const error = ref("");
 const showEdit = ref(false);
+const detail = ref(null);
 const showCreate = ref(false);
 const createForm = ref({
     ruc: "",
@@ -202,6 +209,17 @@ const createForm = ref({
     phone: "",
 });
 
+onMounted(async () => {
+    try {
+        const response = await getAllProviders();
+        providers.value = response.data;
+    } catch (err) {
+        error.value = err.response?.data?.message || "Error al cargar proveedores";
+    } finally {
+        loading.value = false;
+    }
+});
+
 const openCreate = () => {
     showCreate.value = true;
 };
@@ -211,12 +229,12 @@ const searchByRuc = async () => {
         const response = await getProviderByRuc(createForm.value.ruc);
         const data = response.data;
 
-        createForm.value.name = "data.name";
-        createForm.value.address = "data.address";
-        createForm.value.district = "data.district";
-        createForm.value.province = "data.province";
-        createForm.value.department = "data.department";
-        createForm.value.status = "data.status";
+        createForm.value.name = data.socialReason;
+        createForm.value.address = data.address;
+        createForm.value.district = data.district;
+        createForm.value.province = data.province;
+        createForm.value.department = data.department;
+        createForm.value.status = data.status;
     } catch (err) {
         console.error("Error buscando RUC:", err);
     }
@@ -234,8 +252,8 @@ const createProviderFn = async () => {
 
 const openDetail = async (id) => {
     try {
-        //const response = await getUserDetail(id);
-        //detail.value = response.data;
+        const response = await getProviderDetailById(id);
+        detail.value = response.data;
         showDetail.value = true;
     } catch (err) {
         console.error("Error al traer detalle:", err);
