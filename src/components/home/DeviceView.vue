@@ -2,7 +2,7 @@
 import MovementForm from '../shared/MovementForm.vue';
 </script>
 <template>
-    <div class=" px-16 py-4">
+    <div class="px-16 py-4">
         <div class="grid grid-rows-[5rem_1fr] grid-cols-3 gap-4 h-full">
             <div class="col-span-3">
                 <div class="w-full h-full bg-white rounded-lg shadow-md flex items-center">
