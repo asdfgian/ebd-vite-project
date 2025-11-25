@@ -57,7 +57,7 @@
                         <div class="grid grid-cols-3 gap-2 mb-3">
                             <div class="col-span-2">
                                 <label class="block text-sm text-white mb-1">RUC</label>
-                                <input v-model="createForm.ruc" type="number"
+                                <input v-model="createForm.ruc" type="text"
                                     class="border text-sm rounded-lg block w-full p-2.5 bg-gray-600 border-gray-500 text-white"
                                     required />
                             </div>
@@ -152,25 +152,36 @@
             <!-- Editar -->
             <div v-if="showEdit" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center">
                 <div class="bg-blue-ebd p-6 rounded-lg shadow-lg max-w-lg w-full">
-                    <form>
+                    <h2 class="text-xl font-bold mb-4 text-white">
+                        Editar Proveedor
+                    </h2>
+                    <form @submit.prevent="updateProviderFn">
                         <div class="mb-2">
-                            <label class="block text-sm text-white mb-2">Email</label>
-                            <input type="text"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required="" />
+                            <label class="block text-sm text-white mb-1">RUC</label>
+                            <input v-model="editForm.ruc" type="text" disabled
+                                class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-500 text-white" />
                         </div>
                         <div class="mb-2">
-                            <label class="block text-sm text-white mb-2">Telefono</label>
-                            <input type="text"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                required="" />
+                            <label class="block text-sm text-white mb-1">Nombre</label>
+                            <input v-model="editForm.name" type="text" disabled
+                                class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-500 text-white" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-1">Email</label>
+                            <input v-model="editForm.email" type="email"
+                                class="border text-sm rounded-lg block w-full p-2.5 bg-gray-600 border-gray-500 text-white" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-sm text-white mb-1">Teléfono</label>
+                            <input v-model="editForm.phone" type="tel"
+                                class="border text-sm rounded-lg block w-full p-2.5 bg-gray-600 border-gray-500 text-white" />
                         </div>
                         <div class="mt-4 flex justify-end gap-3">
                             <button type="button" @click="showEdit = false"
                                 class="px-4 py-2 bg-gray-400 text-white rounded cursor-pointer">
                                 Cancelar
                             </button>
-                            <button type="submit" class="px-4 py-2 bg-orange-ebd text-white rounded cursor-pointer">
+                            <button type="submit" class="px-4 py-2 bg-orange-ebd text-white rounded cursor-pointer hover:bg-orange-600">
                                 Guardar
                             </button>
                         </div>
@@ -187,7 +198,8 @@ import {
     getProviderByRuc,
     createProvider,
     getAllProviders,
-    getProviderDetailById
+    getProviderDetailById,
+    updateProvider
 } from "../../services/ProviderService";
 
 const providers = ref([]);
@@ -208,16 +220,21 @@ const createForm = ref({
     email: "",
     phone: "",
 });
+const editForm = ref({
+    id: null,
+    ruc: "",
+    name: "",
+    address: "",
+    district: "",
+    province: "",
+    department: "",
+    status: "",
+    email: "",
+    phone: "",
+});
 
 onMounted(async () => {
-    try {
-        const response = await getAllProviders();
-        providers.value = response.data;
-    } catch (err) {
-        error.value = err.response?.data?.message || "Error al cargar proveedores";
-    } finally {
-        loading.value = false;
-    }
+    await loadProviders();
 });
 
 const openCreate = () => {
@@ -229,7 +246,7 @@ const searchByRuc = async () => {
         const response = await getProviderByRuc(createForm.value.ruc);
         const data = response.data;
 
-        createForm.value.name = data.socialReason;
+        createForm.value.name = data.name;
         createForm.value.address = data.address;
         createForm.value.district = data.district;
         createForm.value.province = data.province;
@@ -245,6 +262,8 @@ const createProviderFn = async () => {
         console.log("Datos enviados:", createForm.value);
         await createProvider(createForm.value);
         showCreate.value = false;
+        await loadProviders();
+        resetCreateForm();
     } catch (err) {
         console.error("Error al crear proveedor:", err);
     }
@@ -262,12 +281,74 @@ const openDetail = async (id) => {
 
 const openEdit = async (id) => {
     try {
-        //const response = await getUserDetail(id);
-        //const user = response.data;
+        const response = await getProviderDetailById(id);
+        const provider = response.data;
+
+        editForm.value = {
+            id: provider.id,
+            ruc: provider.ruc,
+            name: provider.name,
+            address: provider.address,
+            district: provider.district,
+            province: provider.province,
+            department: provider.department,
+            status: provider.status,
+            email: provider.email,
+            phone: provider.phone,
+        };
 
         showEdit.value = true;
     } catch (err) {
-        console.error("Error al traer usuario para editar:", err);
+        console.error("Error al traer proveedor para editar:", err);
     }
+};
+
+const updateProviderFn = async () => {
+    try {
+        await updateProvider(editForm.value.id, editForm.value);
+        showEdit.value = false;
+        await loadProviders();
+        resetEditForm();
+    } catch (err) {
+        console.error("Error al actualizar proveedor:", err);
+    }
+};
+
+const loadProviders = async () => {
+    try {
+        const response = await getAllProviders();
+        providers.value = response.data;
+    } catch (err) {
+        error.value = err.response?.data?.message || "Error al cargar proveedores";
+    }
+};
+
+const resetCreateForm = () => {
+    createForm.value = {
+        ruc: "",
+        name: "",
+        address: "",
+        district: "",
+        province: "",
+        department: "",
+        status: "",
+        email: "",
+        phone: "",
+    };
+};
+
+const resetEditForm = () => {
+    editForm.value = {
+        id: null,
+        ruc: "",
+        name: "",
+        address: "",
+        district: "",
+        province: "",
+        department: "",
+        status: "",
+        email: "",
+        phone: "",
+    };
 };
 </script>

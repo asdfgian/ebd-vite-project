@@ -38,15 +38,9 @@
             </div>
             <div class="bg-transparent h-full flex justify-center">
                 <div class="bg-transparent h-full w-[50%] flex flex-col items-center justify-center">
-                    <div class="bg-gray-400 w-30 h-30 rounded-[100%] flex justify-center items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-32">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
-                    </div>
-                    <p class="mt-3 text-2xl font-bold">asdf</p>
-                    <p class="mt-1 text-gray-500">hola</p>
+                    <img src="https://avatar.iran.liara.run/public/42" alt="avatar" class="w-35 h-35 rounded-full" />
+                    <p class="mt-3 text-2xl font-bold">ASDFG14N</p>
+                    <p class="mt-1 text-gray-500">gian@gmail.com</p>
                 </div>
             </div>
         </div>

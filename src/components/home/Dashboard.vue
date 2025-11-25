@@ -2,7 +2,7 @@
     <div class="h-[calc(100vh-4rem)] px-16 py-4">
         <div class="bg-white w-full h-full overflow-y-auto p-4 rounded-md space-y-6">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Card v-for="(card, index) in cards" :key="index" :title="card.title" :value="card.value"
                     :growth="card.growth" />
             </div>
@@ -52,7 +52,6 @@
 import Card from '../shared/Card.vue';
 
 const cards = [
-    { title: "Contratos Activos", value: "125", growth: "+10%" },
     { title: "Órdenes de compra", value: "350", growth: "+5%" },
     { title: "Dispositivos Activos", value: "875", growth: "+15%" },
     { title: "Proveedores Registrador", value: "50", growth: "+20%" },

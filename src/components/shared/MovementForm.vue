@@ -2,7 +2,7 @@
     <form @submit.prevent="handleOpenModal" class="flex items-center px-5 justify-between w-full">
         <div>
             <label class="block mb-1.5 text-[12px] font-medium text-gray-900">Movimiento*</label>
-            <select v-model="form.movimiento" class="bg-orange-ebd border h-9 text-white text-sm rounded block px-2">
+            <select v-model="form.type" class="bg-orange-ebd border h-9 text-white text-sm rounded block px-2">
                 <option disabled value="">Seleccionar</option>
                 <option v-for="(mov, index) in movimientos" :key="index" :value="mov">
                     {{ mov }}
@@ -13,22 +13,22 @@
         <div class="flex items-center gap-3">
             <div>
                 <label class="block mb-1.5 text-[12px] font-medium text-gray-900">Empleado Origen*</label>
-                <select v-model="form.empleadoOrigen"
+                <select v-model="form.userOriginId"
                     class="bg-orange-ebd border h-9 text-white text-sm rounded block w-full px-2">
-                    <option disabled value="">Seleccione</option>
-                    <option v-for="(empleado, index) in empleados" :key="'origen-' + index" :value="empleado">
-                        {{ empleado }}
+                    <option :value="null">Seleccione</option>
+                    <option v-for="user in users" :key="'origen-' + user.id" :value="user.id">
+                        {{ user.name }}
                     </option>
                 </select>
             </div>
 
             <div>
                 <label class="block mb-1.5 text-[12px] font-medium text-gray-900">Empleado Destino*</label>
-                <select v-model="form.empleadoDestino"
+                <select v-model="form.userDestinationId"
                     class="bg-orange-ebd border h-9 text-white text-sm rounded block w-full px-2">
-                    <option disabled value="">Seleccione</option>
-                    <option v-for="(empleado, index) in empleados" :key="'destino-' + index" :value="empleado">
-                        {{ empleado }}
+                    <option :value="null">Seleccione</option>
+                    <option v-for="user in users" :key="'destino-' + user.id" :value="user.id">
+                        {{ user.name }}
                     </option>
                 </select>
             </div>
@@ -42,7 +42,7 @@
             </button>
         </div>
         <!-- Modal -->
-        <div v-if="showModal" class="fixed inset-0 bg-gray-800 bg-opacity-95 flex justify-center items-center z-60"
+        <div v-if="showModal" class="fixed inset-0 z-20 bg-gray-100/40 flex justify-center items-center"
             @click.self="showModal = false">
             <div class="relative bg-blue-ebd rounded-lg shadow-sm w-[22rem]">
                 <div class="flex items-center justify-between p-4 border-b border-gray-200">
@@ -61,12 +61,12 @@
                 </div>
 
                 <div class="p-4">
-                    <textarea v-model="form.comentario" rows="4"
+                    <textarea v-model="form.comment" rows="4"
                         class="block p-2.5 w-full text-sm rounded-lg borderbg-gray-700 border-gray-600 placeholder-gray-400 text-white"
                         placeholder="Escribe un breve comentario aquí..."></textarea>
 
                     <div class="flex justify-end mt-4">
-                        <button type="submit"
+                        <button type="button" @click="handleSave"
                             class="text-white inline-flex items-center bg-orange-ebd cursor-pointer rounded-lg text-sm px-5 py-2.5 text-center hover:opacity-90">
                             Guardar
                         </button>
@@ -82,7 +82,18 @@
 
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
+import { getAllUsers } from "../../services/UserService";
+import { createMovementApi } from "../../services/MovementService";
+
+const props = defineProps({
+    deviceId: {
+        type: Number,
+        required: true
+    }
+});
+
+const emit = defineEmits(['movement-created']);
 
 const movimientos = [
     "Ingreso por compra",
@@ -95,35 +106,73 @@ const movimientos = [
     "Ajuste por inventario",
 ];
 
-const empleados = ["Gian", "María", "Carlos", "Ana"];
+const users = ref([]);
 
 const form = reactive({
-    movimiento: "",
-    empleadoOrigen: "",
-    empleadoDestino: "",
-    comentario: ""
+    type: "",
+    userOriginId: null,
+    userDestinationId: null,
+    comment: "",
+    deviceId: null,
+    date: null,
+    createdBy: null,
 });
 
 const showModal = ref(false);
 
+onMounted(async () => {
+    try {
+        const response = await getAllUsers();
+        users.value = response.data;
+        // Obtener el usuario actual del localStorage o contexto
+        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        form.createdBy = currentUser.id || 1;
+        form.deviceId = props.deviceId;
+    } catch (err) {
+        console.error("Error al cargar usuarios:", err);
+    }
+});
+
 function handleOpenModal() {
-    if (!form.movimiento || !form.empleadoOrigen || !form.empleadoDestino) {
+    if (!form.type || !form.userOriginId || !form.userDestinationId) {
         alert("Todos los campos son obligatorios ⚠️");
         return;
     }
     showModal.value = true;
 }
 
-function handleSave() {
-    if (!form.comentario.trim()) {
+async function handleSave() {
+    if (!form.comment.trim()) {
         alert("El comentario es obligatorio ⚠️");
         return;
     }
 
-    console.log("Formulario enviado:", { ...form });
-    alert("Movimiento registrado ✅");
+    try {
+        const payload = {
+            date: new Date(),
+            comment: form.comment,
+            deviceId: form.deviceId,
+            type: form.type,
+            userOriginId: form.userOriginId,
+            userDestinationId: form.userDestinationId,
+            createdBy: form.createdBy,
+        };
 
-    showModal.value = false;
-    form.comentario = "";
+        await createMovementApi(payload);
+        alert("Movimiento registrado ✅");
+
+        // Emitir evento para recargar el historial
+        emit('movement-created');
+
+        // Limpiar formulario
+        form.type = "";
+        form.userOriginId = null;
+        form.userDestinationId = null;
+        form.comment = "";
+        showModal.value = false;
+    } catch (err) {
+        console.error("Error al guardar movimiento:", err);
+        alert("Error al registrar movimiento ❌");
+    }
 }
 </script>
